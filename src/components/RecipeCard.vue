@@ -1,14 +1,16 @@
 <template>
-  <v-card class="mx-auto my-4" max-width="400" @click="$emit('click', recipe)">
+  <v-card class="mx-auto my-4" max-width="400" height="400" @click="$emit('click', recipe)">
     <v-img :src="recipe.image" :alt="`${recipe.title}の画像`" height="200" cover />
     <v-card-title>{{ recipe.title }}</v-card-title>
-    <v-card-subtitle>{{ recipe.category }}</v-card-subtitle>
+    <v-card-subtitle>
+      <v-chip color="primary" text-color="white">{{ recipe.category }}</v-chip>
+    </v-card-subtitle>
     <v-card-text>
       {{ recipe.description }}
     </v-card-text>
     <v-card-actions>
-      <v-btn @click.stop="$emit('edit', recipe)" color="primary" variant="text">編集</v-btn>
-      <v-btn @click.stop="$emit('delete', recipe.id)" color="error" variant="text">削除</v-btn>
+      <v-btn @click.stop="emit('edit', recipe)" color="primary" variant="text">編集</v-btn>
+      <v-btn @click.stop="emit('delete', recipe.id)" color="error" variant="text">削除</v-btn>
     </v-card-actions>
   </v-card>
 </template>

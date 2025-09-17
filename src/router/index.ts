@@ -12,6 +12,7 @@ const routes = [
     path: '/recipe/:id',
     name: 'recipe-detail',
     component: RecipeDetailView,
+    props: true,
   },
 ]
 

@@ -1,0 +1,13 @@
+{
+  "recipes": [
+    {
+      "id": 1,
+      "title": "味噌汁",
+      "description": "シンプルで毎日飲める定番の一品",
+      "ingredients": ["味噌", "豆腐", "わかめ", "ねぎ"],
+      "steps": ["鍋に水を入れる", "具材を加えて煮る", "味噌を溶かす"],
+      "category": "和食",
+      "image": "https://example.com/miso.jpg"
+    }
+  ]
+}

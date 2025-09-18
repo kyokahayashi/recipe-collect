@@ -5,8 +5,15 @@ const api = axios.create({
   baseURL: 'http://localhost:3000',
 })
 
+const API_URL = 'http://localhost:3000/recipes'
+
 export const fetchRecipes = async (): Promise<Recipe[]> => {
   const res = await api.get<Recipe[]>('/recipes')
+  return res.data
+}
+
+export const getRecipeById = async (id: number): Promise<Recipe> => {
+  const res = await axios.get<Recipe>(`${API_URL}/${id}`)
   return res.data
 }
 

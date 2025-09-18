@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto my-4" max-width="400" height="400" @click="$emit('click', recipe)">
+  <v-card class="mx-auto my-4" max-width="400" height="400" @click="emit('click', recipe)">
     <v-img :src="recipe.image" :alt="`${recipe.title}の画像`" height="200" cover />
     <v-card-title>{{ recipe.title }}</v-card-title>
     <v-card-subtitle>

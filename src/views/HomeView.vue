@@ -3,7 +3,12 @@
     <v-btn @click="openForm" color="primary" class="my-4">レシピを追加</v-btn>
     <v-row>
       <v-col cols="12" md="6" lg="4" v-for="recipe in recipes" :key="recipe.id">
-        <RecipeCard :recipe="recipe" @edit="editRecipe" @delete="deleteRecipe" />
+        <RecipeCard
+          :recipe="recipe"
+          @click="openDetail"
+          @edit="editRecipe"
+          @delete="deleteRecipe"
+        />
       </v-col>
     </v-row>
 
@@ -27,10 +32,19 @@ import RecipeForm from '@/components/RecipeForm.vue'
 import { useRecipe } from '@/composables/useRecipe'
 import type { Recipe } from '@/types/recipe'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const { recipes, fetchAll, addRecipe, updateRecipe, removeRecipe } = useRecipe()
 
 const formDialog = ref(false)
+
+const router = useRouter()
+const openDetail = (recipe: Recipe) => {
+  console.log('openDetail', recipe, recipe.id)
+  router
+    .push({ name: 'recipe-detail', params: { id: String(recipe.id) } })
+    .catch((err) => console.error('router.push failed', err))
+}
 
 function createEmptyRecipe(): Recipe {
   return {

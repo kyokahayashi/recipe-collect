@@ -3,10 +3,10 @@
     <h1>レシピ名</h1>
     <v-card v-if="recipe" class="mx-auto my-5" max-width="600">
       <v-img :src="recipe.image" height="300px" cover></v-img>
-      <v-card-title>{{ RecipeCard.title }}</v-card-title>
-      <v-card-subtitle>{{ RecipeCard.category }}</v-card-subtitle>
+      <v-card-title>{{ recipe?.title }}</v-card-title>
+      <v-card-subtitle>{{ recipe?.category }}</v-card-subtitle>
       <v-card-text>
-        <p>{{ recipe.description }}</p>
+        <p>{{ recipe?.description }}</p>
         <h4>材料</h4>
         <v-list>
           <v-list-item v-for="(item, index) in recipe.ingredients" :key="index">
@@ -31,7 +31,6 @@
 </template>
 
 <script setup lang="ts">
-import RecipeCard from '@/components/RecipeCard.vue'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { Recipe } from '@/types/recipe'
@@ -45,8 +44,10 @@ const isLoaded = ref(false)
 const recipe = ref<Recipe | null>(null)
 
 const fetchRecipe = async () => {
-  const id = Number(route.params.id)
-  if (!id) return
+  const idParam = route.params.id
+  if (!idParam) return
+
+  const id = Array.isArray(idParam) ? idParam[0] : idParam
 
   try {
     const data = await getRecipeById(id)

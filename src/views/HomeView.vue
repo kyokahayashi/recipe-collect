@@ -1,4 +1,5 @@
 <template>
+  <SearchBar class="my-4" />
   <v-container>
     <v-btn @click="openForm" color="primary" class="my-4">レシピを追加</v-btn>
     <v-row>
@@ -29,6 +30,7 @@
 <script setup lang="ts">
 import RecipeCard from '@/components/RecipeCard.vue'
 import RecipeForm from '@/components/RecipeForm.vue'
+import SearchBar from '@/components/SearchBar.vue'
 import { useRecipe } from '@/composables/useRecipe'
 import type { Recipe } from '@/types/recipe'
 import { onMounted, ref } from 'vue'
@@ -71,8 +73,9 @@ function editRecipe(recipe: Recipe) {
 }
 
 function handleSubmit(recipe: Recipe) {
-  if (recipe.id === 0) {
-    addRecipe(recipe)
+  const { id, ...payload } = recipe
+  if (id === 0) {
+    addRecipe(payload)
   } else {
     updateRecipe(recipe)
   }

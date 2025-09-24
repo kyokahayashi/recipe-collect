@@ -1,9 +1,14 @@
 <template>
-  <SearchBar class="my-4" />
+  <SearchBar
+    :title="searchTitle"
+    :ingredients="searchIngredients"
+    @search="handleSearch"
+    @reset="handleReset"
+  />
   <v-container>
     <v-btn @click="openForm" color="primary" class="my-4">レシピを追加</v-btn>
     <v-row>
-      <v-col cols="12" md="6" lg="4" v-for="recipe in recipes" :key="recipe.id">
+      <v-col cols="12" md="6" lg="4" v-for="recipe in filteredRecipes" :key="recipe.id">
         <RecipeCard
           :recipe="recipe"
           @click="openDetail"
@@ -33,12 +38,34 @@ import RecipeForm from '@/components/RecipeForm.vue'
 import SearchBar from '@/components/SearchBar.vue'
 import { useRecipe } from '@/composables/useRecipe'
 import type { Recipe } from '@/types/recipe'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const { recipes, fetchAll, addRecipe, updateRecipe, removeRecipe } = useRecipe()
 
 const formDialog = ref(false)
+const searchTitle = ref('')
+const searchIngredients = ref<string[]>([])
+
+const filteredRecipes = computed(() => {
+  const normalizedTitle = searchTitle.value.trim().toLowerCase()
+  const normalizedIngredients = searchIngredients.value
+    .map((item) => item.trim().toLowerCase())
+    .filter(Boolean)
+  // ？normalizedTitleやnormalizedIngredientsでは日本語なのにtoLowerCase()しても変わらないのでは？
+  return recipes.value.filter((recipe) => {
+    const matchesTitle =
+      normalizedTitle.length === 0 || recipe.title.toLowerCase().includes(normalizedTitle)
+    // タイトル検索の文字数がfalsyの場合０を返し、truthyの場合タイトル検索に入力されたタイトルを返す。（右辺がようわからん）
+    const matchesIngredients =
+      normalizedIngredients.length === 0 ||
+      normalizedIngredients.every((needle) =>
+        recipe.ingredients.some((ingredient) => ingredient.toLowerCase().includes(needle)),
+      )
+
+    return matchesTitle && matchesIngredients
+  })
+})
 
 const router = useRouter()
 const openDetail = (recipe: Recipe) => {
@@ -80,6 +107,16 @@ function handleSubmit(recipe: Recipe) {
     updateRecipe(recipe)
   }
   formDialog.value = false
+}
+
+function handleSearch(payload: { title: string; ingredients: string[] }) {
+  searchTitle.value = payload.title
+  searchIngredients.value = payload.ingredients
+}
+
+function handleReset() {
+  searchTitle.value = ''
+  searchIngredients.value = []
 }
 
 function deleteRecipe(id: number) {

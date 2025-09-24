@@ -1,35 +1,36 @@
 <template>
-  <v-card flat class="pa-4">
-    <v-form @submit.prevent="emitSearch">
-      <v-row dense>
-        <v-col cols="12" md="6">
+  <div class="searchbar">
+    <h2 class="searchbar">レシピ検索</h2>
+    <v-card flat class="pa-4 searchbar-card" justify="center">
+      <v-form color="black" @submit.prevent="emitSearch">
+        <div class="searchbar__inputs">
           <v-text-field
             v-model="title"
             label="レシピタイトル"
-            prepend-inner-icon="mdi-text-box-search"
             clearable
+            variant="solo"
+            class="searchbar__input searchbar__title"
           />
-        </v-col>
-        <v-col cols="12" md="6">
           <v-combobox
             v-model="ingredients"
             :items="ingredientSuggestions"
             label="食材（複数可）"
-            prepend-inner-icon="mdi-food-apple"
             multiple
             chips
             clearable
+            variant="solo"
+            class="searchbar__input"
           />
-        </v-col>
-      </v-row>
-      <v-row dense>
-        <v-col cols="12" sm="auto">
-          <v-btn type="submit" color="primary" class="mr-2">検索</v-btn>
-          <v-btn variant="text" @click="emitReset">リセット</v-btn>
-        </v-col>
-      </v-row>
-    </v-form>
-  </v-card>
+        </div>
+        <v-row dense>
+          <v-col class="button-group" cols="12">
+            <v-btn type="submit" color="primary" class="mr-2 button">検索</v-btn>
+            <v-btn class="button" variant="text" @click="emitReset">リセット</v-btn>
+          </v-col>
+        </v-row>
+      </v-form>
+    </v-card>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -85,5 +86,47 @@ function emitReset() {
 <style scoped>
 .v-btn + .v-btn {
   margin-left: 8px;
+}
+
+/* .searchbar :deep {
+  margin: 20px 10px;
+  background-color: #9fbeff75;
+} */
+.searchbar h2 {
+  text-align: center;
+}
+.searchbar__title :deep(.v-field__clearable .v-icon) {
+  color: #000000;
+}
+
+.searchbar-card {
+  /* background-color: #9fbeff75; */
+  padding-top: 1%;
+}
+
+.searchbar__inputs {
+  display: flex;
+  justify-content: center;
+  gap: 5%;
+  width: 70%;
+  margin: 0 auto;
+}
+
+.searchbar__input {
+  border: #000000 1.5px solid;
+  flex: 0 1 auto;
+  /* min-width: 0; */
+  width: 35%;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin: 2% 2%;
+}
+.button {
+  flex: 0 1 auto;
+  min-width: 0;
+  width: 120px;
 }
 </style>

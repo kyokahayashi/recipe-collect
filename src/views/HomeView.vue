@@ -2,6 +2,8 @@
   <SearchBar
     :title="searchTitle"
     :ingredients="searchIngredients"
+    :category="searchCategory"
+    :category-options="categoryOptions"
     @search="handleSearch"
     @reset="handleReset"
   />
@@ -46,13 +48,16 @@ const { recipes, fetchAll, addRecipe, updateRecipe, removeRecipe } = useRecipe()
 const formDialog = ref(false)
 const searchTitle = ref('')
 const searchIngredients = ref<string[]>([])
+const searchCategory = ref('')
+const categoryOptions = computed(() => Array.from(new Set(recipes.value.map((r) => r.category))))
 
 const filteredRecipes = computed(() => {
   const normalizedTitle = searchTitle.value.trim().toLowerCase()
   const normalizedIngredients = searchIngredients.value
     .map((item) => item.trim().toLowerCase())
     .filter(Boolean)
-  // ？normalizedTitleやnormalizedIngredientsでは日本語なのにtoLowerCase()しても変わらないのでは？
+  // ？normalizedTitleやnormalizedIngredientsでは日本語なのにtoLowerCase()しても変わらないのでは？←今後英字を使うことを考慮して残す
+  const normalizedCategory = searchCategory.value.trim()
   return recipes.value.filter((recipe) => {
     const matchesTitle =
       normalizedTitle.length === 0 || recipe.title.toLowerCase().includes(normalizedTitle)
@@ -62,8 +67,10 @@ const filteredRecipes = computed(() => {
       normalizedIngredients.every((needle) =>
         recipe.ingredients.some((ingredient) => ingredient.toLowerCase().includes(needle)),
       )
-
-    return matchesTitle && matchesIngredients
+    // 材料検索の入力文字数が0だったりfalsyの場合０を返す。truthyだった場合,材料検索に入力された材料がすべて含まれているかをチェックし、含まれていればtrueを返す。
+    const matchesCategory =
+      normalizedCategory.length === 0 || recipe.category === normalizedCategory
+    return matchesTitle && matchesIngredients && matchesCategory
   })
 })
 
@@ -109,9 +116,10 @@ function handleSubmit(recipe: Recipe) {
   formDialog.value = false
 }
 
-function handleSearch(payload: { title: string; ingredients: string[] }) {
+function handleSearch(payload: { title: string; ingredients: string[]; category: string | null }) {
   searchTitle.value = payload.title
   searchIngredients.value = payload.ingredients
+  searchCategory.value = payload.category ?? ''
 }
 
 function handleReset() {

@@ -26,11 +26,14 @@ export function useRecipe() {
     recipes.value = recipes.value.filter(r => r.id !== id)
   }
 
+  const filterByCategory = (category: string) => recipes.value.filter(recipe => category ? recipe.category === category : true)
+
   return {
     recipes,
     fetchAll,
     addRecipe,
     updateRecipe,
     removeRecipe,
+    filterByCategory
   }
 }

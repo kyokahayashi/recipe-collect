@@ -21,6 +21,13 @@
             variant="solo"
             class="searchbar__input"
           />
+          <v-select
+            class="searchbar__input"
+            label="カテゴリを選択してください"
+            :items="categoryOptions"
+            v-model="category"
+            clearable
+          />
         </div>
         <v-row dense>
           <v-col class="button-group" cols="12">
@@ -51,21 +58,33 @@ const props = defineProps({
     type: Array as PropType<string[]>,
     default: () => [],
   },
+  category: {
+    type: String,
+    default: '',
+  },
+  categoryOptions: {
+    type: Array as PropType<string[]>,
+    default: () => [],
+  },
 })
 
 const emit = defineEmits<{
-  (e: 'search', payload: { title: string; ingredients: string[] }): void
+  (e: 'search', payload: { title: string; ingredients: string[]; category: string | null }): void
   (e: 'reset'): void
 }>()
 
 const title = ref(props.title)
 const ingredients = ref<string[]>([...props.ingredients])
+const categoryOptions = ref<string[]>([...props.categoryOptions])
+const category = ref(props.category ?? '')
 
 watch(
-  () => [props.title, props.ingredients] as const,
-  ([nextTitle, nextIngredients]) => {
+  () => [props.title, props.ingredients, props.category, props.categoryOptions] as const,
+  ([nextTitle, nextIngredients, nextCategory, nextCategoryOptions]) => {
     title.value = nextTitle
     ingredients.value = [...nextIngredients]
+    category.value = nextCategory
+    categoryOptions.value = nextCategoryOptions
   },
 )
 
@@ -73,12 +92,14 @@ function emitSearch() {
   emit('search', {
     title: title.value.trim(),
     ingredients: ingredients.value.map((item) => item.trim()).filter(Boolean),
+    category: category.value ? category.value.trim() : null,
   })
 }
 
 function emitReset() {
   title.value = ''
   ingredients.value = []
+  category.value = ''
   emit('reset')
 }
 </script>
@@ -107,7 +128,7 @@ function emitReset() {
 .searchbar__inputs {
   display: flex;
   justify-content: center;
-  gap: 5%;
+  gap: 2%;
   width: 70%;
   margin: 0 auto;
 }
@@ -116,7 +137,7 @@ function emitReset() {
   border: #000000 1.5px solid;
   flex: 0 1 auto;
   /* min-width: 0; */
-  width: 35%;
+  width: 45%;
 }
 
 .button-group {

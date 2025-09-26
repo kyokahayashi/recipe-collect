@@ -1,0 +1,17 @@
+:root {
+  --v-field-clearable-opacity: 1;
+}
+
+.v-field__clearable {
+  opacity: 1;
+}
+
+.v-field__clearable > .v-icon {
+  color: rgb(var(--v-theme-primary));
+  opacity: 1;
+}
+
+.v-field__clearable:hover > .v-icon,
+.v-field__clearable:focus-visible > .v-icon {
+  color: rgb(var(--v-theme-primary-darken-1));
+}

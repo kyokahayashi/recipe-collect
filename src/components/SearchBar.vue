@@ -8,8 +8,8 @@
             v-model="title"
             label="レシピタイトル"
             clearable
-            variant="solo"
             class="searchbar__input searchbar__title"
+            variant="underlined"
           />
           <v-combobox
             v-model="ingredients"
@@ -18,8 +18,8 @@
             multiple
             chips
             clearable
-            variant="solo"
             class="searchbar__input"
+            variant="underlined"
           />
           <v-select
             class="searchbar__input"
@@ -27,12 +27,14 @@
             :items="categoryOptions"
             v-model="category"
             clearable
+            item-color="success"
+            variant="underlined"
           />
         </div>
         <v-row dense>
           <v-col class="button-group" cols="12">
-            <v-btn type="submit" color="primary" class="mr-2 button">検索</v-btn>
-            <v-btn class="button" variant="text" @click="emitReset">リセット</v-btn>
+            <v-btn type="submit" color="primary" variant="elevated" class="mr-2 button">検索</v-btn>
+            <v-btn class="button" color="warning" @click="emitReset">リセット</v-btn>
           </v-col>
         </v-row>
       </v-form>
@@ -42,6 +44,7 @@
 
 <script setup lang="ts">
 import { type PropType, ref, watch } from 'vue'
+import '@mdi/font/css/materialdesignicons.css'
 
 defineOptions({ name: 'SearchBar' })
 
@@ -109,19 +112,11 @@ function emitReset() {
   margin-left: 8px;
 }
 
-/* .searchbar :deep {
-  margin: 20px 10px;
-  background-color: #9fbeff75;
-} */
 .searchbar h2 {
   text-align: center;
 }
-.searchbar__title :deep(.v-field__clearable .v-icon) {
-  color: #000000;
-}
 
 .searchbar-card {
-  /* background-color: #9fbeff75; */
   padding-top: 1%;
 }
 
@@ -134,9 +129,7 @@ function emitReset() {
 }
 
 .searchbar__input {
-  border: #000000 1.5px solid;
   flex: 0 1 auto;
-  /* min-width: 0; */
   width: 45%;
 }
 

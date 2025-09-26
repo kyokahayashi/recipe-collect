@@ -28,7 +28,7 @@ export const updateRecipe = async (recipe: Recipe): Promise<Recipe> => {
   return res.data
 }
 
-export const deleteRecipe = async (id: number): Promise<void> => {
+export const deleteRecipe = async (id: string | number): Promise<void> => {
   await api.delete(`/recipes/${id}`)
 }
 // <void>って何？

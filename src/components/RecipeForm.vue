@@ -28,7 +28,7 @@
     <v-text-field v-model="form.image" label="画像URL" :rules="imageRules" />
     <div class="mt-4">
       <v-btn type="submit" color="primary">保存</v-btn>
-      <v-btn class="ml-2" variant="text" @click="reset">リセット</v-btn>
+      <v-btn class="ml-2" color="warning" @click="reset">リセット</v-btn>
     </div>
   </v-form>
 </template>

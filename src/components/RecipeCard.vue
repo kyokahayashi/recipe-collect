@@ -15,7 +15,9 @@
     </v-card-text>
     <v-card-actions>
       <v-btn @click.stop="emit('edit', recipe)" color="primary" variant="text">編集</v-btn>
-      <v-btn @click.stop="emit('delete', recipe.id)" color="error" variant="text">削除</v-btn>
+      <v-btn @click.stop="emit('delete', Number(recipe.id))" color="error" variant="text"
+        >削除</v-btn
+      >
     </v-card-actions>
   </v-card>
 </template>
